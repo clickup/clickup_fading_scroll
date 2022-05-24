@@ -46,7 +46,7 @@ void main() {
     await expectLater(
       find.byType(Content),
       matchesGoldenFile(
-        'vertical_not_scrolled.png',
+        'vertical_01_start.png',
       ),
     );
 
@@ -60,7 +60,7 @@ void main() {
     await expectLater(
       find.byType(Content),
       matchesGoldenFile(
-        'vertical_start_scrolling.png',
+        'vertical_02_near_start.png',
       ),
     );
 
@@ -74,7 +74,7 @@ void main() {
     await expectLater(
       find.byType(Content),
       matchesGoldenFile(
-        'vertical_scrolling.png',
+        'vertical_03_middle.png',
       ),
     );
 
@@ -89,7 +89,7 @@ void main() {
     await expectLater(
       find.byType(Content),
       matchesGoldenFile(
-        'vertical_near_end.png',
+        'vertical_04_near_end.png',
       ),
     );
 
@@ -103,7 +103,7 @@ void main() {
     await expectLater(
       find.byType(Content),
       matchesGoldenFile(
-        'vertical_near_end.png',
+        'vertical_05_end.png',
       ),
     );
 
