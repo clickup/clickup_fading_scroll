@@ -33,7 +33,7 @@ void main() {
     tearDown(tester);
   });
 
-  testWidgets('Scrollable content', (WidgetTester tester) async {
+  testWidgets('Vertical scrollable content', (WidgetTester tester) async {
     setup(tester);
     const totalExtent = 5000.0;
     await tester.pumpWidget(
@@ -66,7 +66,7 @@ void main() {
 
     await tester.pumpWidget(
       const Content(
-        scrollExtent: 1250,
+        scrollExtent: totalExtent / 2,
         totalExtent: totalExtent,
       ),
     );
@@ -104,6 +104,88 @@ void main() {
       find.byType(Content),
       matchesGoldenFile(
         'vertical_05_end.png',
+      ),
+    );
+
+    tearDown(tester);
+  });
+
+  testWidgets('Horizontal scrollable content', (WidgetTester tester) async {
+    setup(tester);
+    const totalExtent = 5000.0;
+    await tester.pumpWidget(
+      const Content(
+        scrollDirection: Axis.horizontal,
+        scrollExtent: 0,
+        totalExtent: totalExtent,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(Content),
+      matchesGoldenFile(
+        'horizontal_01_start.png',
+      ),
+    );
+
+    await tester.pumpWidget(
+      const Content(
+        scrollDirection: Axis.horizontal,
+        scrollExtent: 25,
+        totalExtent: totalExtent,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(Content),
+      matchesGoldenFile(
+        'horizontal_02_near_start.png',
+      ),
+    );
+
+    await tester.pumpWidget(
+      const Content(
+        scrollDirection: Axis.horizontal,
+        scrollExtent: totalExtent / 2,
+        totalExtent: totalExtent,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(Content),
+      matchesGoldenFile(
+        'horizontal_03_middle.png',
+      ),
+    );
+
+    await tester.pumpWidget(
+      Content(
+        scrollDirection: Axis.horizontal,
+        scrollExtent:
+            totalExtent - tester.binding.window.physicalSize.width - 25,
+        totalExtent: totalExtent,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(Content),
+      matchesGoldenFile(
+        'horizontal_04_near_end.png',
+      ),
+    );
+
+    await tester.pumpWidget(
+      Content(
+        scrollDirection: Axis.horizontal,
+        scrollExtent: totalExtent - tester.binding.window.physicalSize.width,
+        totalExtent: totalExtent,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await expectLater(
+      find.byType(Content),
+      matchesGoldenFile(
+        'horizontal_05_end.png',
       ),
     );
 
