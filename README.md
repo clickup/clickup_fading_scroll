@@ -35,6 +35,9 @@ Widget build(BuildContext context) {
 
 ### Customize fading size and scroll threshold
 
+![Logo](doc/doc_dark.svg#gh-dark-mode-only)
+![Logo](doc/doc_light.svg#gh-light-mode-only)
+
 You can customise the effect by providing custom scroll extents and fading sizes.
 
 ```dart
@@ -54,9 +57,6 @@ Widget build(BuildContext context) {
     );
 }
 ```
-
-![Logo](doc/doc_dark.svg#gh-dark-mode-only)
-![Logo](doc/doc_light.svg#gh-light-mode-only)
 
 ### Using a different controller
 
