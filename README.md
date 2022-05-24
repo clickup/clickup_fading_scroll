@@ -1,5 +1,5 @@
-![Logo](doc/banner_dark.png#gh-dark-mode-only)
-![Logo](doc/banner_light.png#gh-light-mode-only)
+![Logo](doc/banner_dark.svg#gh-dark-mode-only)
+![Logo](doc/banner_light.svg#gh-light-mode-only)
 
 <p align="center">Add a fading effect when the user can scroll.</p>
 
@@ -9,8 +9,8 @@ Wrap your scrollable content in a `FadingScroll` widget and give the provided `S
 
 You can customise the effect by providing custom scroll extents and fading sizes.
 
-![Logo](doc/doc_dark.png#gh-dark-mode-only)
-![Logo](doc/doc_light.png#gh-light-mode-only)
+![Logo](doc/doc_dark.svg#gh-dark-mode-only)
+![Logo](doc/doc_light.svg#gh-light-mode-only)
 
 
 ## About
