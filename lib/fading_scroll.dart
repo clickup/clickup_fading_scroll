@@ -73,6 +73,14 @@ class _FadingScrollableState extends State<FadingScroll> {
   late ScrollController controller = widget.controller ?? ScrollController();
 
   @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      setState(() {}); // Trigger initial frame
+    });
+    super.initState();
+  }
+
+  @override
   void didUpdateWidget(covariant FadingScroll oldWidget) {
     super.didUpdateWidget(oldWidget);
     final newController = widget.controller;
@@ -120,11 +128,11 @@ class _FadingScrollableState extends State<FadingScroll> {
         final isAttached = controller.hasClients;
         final isVertical =
             !isAttached || controller.position.axis == Axis.vertical;
-        final startAmount = !isAttached
+        final startAmount = !isAttached || controller.position.extentBefore <= 0
             ? 0.0
             : (controller.position.extentBefore / startScrollExtent)
                 .clamp(0.0, 1.0);
-        final endAmount = !isAttached
+        final endAmount = !isAttached || controller.position.extentAfter <= 0
             ? 0.0
             : (controller.position.extentAfter / endScrollExtent)
                 .clamp(0.0, 1.0);
