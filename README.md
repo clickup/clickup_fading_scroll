@@ -100,6 +100,6 @@ This package has been developped by the ClickUp mobile team for it is own needs,
 
 > Saving people time by making the world more productive.
 
-We're looking for experienced Flutter developers.
+We're looking for experienced developers.
 
 Be Part of Something Great and [Join Us](https://clickup.com/careers)!
