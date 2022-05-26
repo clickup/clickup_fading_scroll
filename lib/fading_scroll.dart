@@ -1,4 +1,4 @@
-library fading_scroll;
+library clickup_fading_scroll;
 
 import 'package:flutter/material.dart';
 

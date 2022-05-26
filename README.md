@@ -10,7 +10,7 @@
 Add the dependency to `fading_scroll` to your `pubspec.yaml` file.
 
 ```bash
-flutter pub add fading_scroll
+flutter pub add clickup_fading_scroll
 ```
 
 Wrap your scrollable content in a `FadingScroll` widget and give the provided `ScrollController` to your scrollable widget.
