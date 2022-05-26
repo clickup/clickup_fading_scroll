@@ -92,3 +92,14 @@ class _State_ extends State<Example> {
 ## About
 
 This package has been developped by the ClickUp mobile team for it is own needs, but feel free to participate by filing issues or submit pull-requests.
+
+## Open Sourced by ClickUp 💙
+
+![ClickUp](doc/clickup_logo_dark.svg#gh-dark-mode-only)
+![ClickUp](doc/clickup_logo_light.svg#gh-light-mode-only)
+
+> Saving people time by making the world more productive.
+
+We're looking for experienced Flutter developers.
+
+Be Part of Something Great and [Join Us](https://clickup.com/careers)!
