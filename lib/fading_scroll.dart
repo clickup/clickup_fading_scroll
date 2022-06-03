@@ -72,6 +72,8 @@ class FadingScroll extends StatefulWidget {
 class _FadingScrollableState extends State<FadingScroll> {
   late ScrollController controller = widget.controller ?? ScrollController();
 
+  var _totalExtent = 0.0;
+
   @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -94,6 +96,20 @@ class _FadingScrollableState extends State<FadingScroll> {
         controller = ScrollController();
       });
     }
+
+    // This is needed because the notifier doesn't update its children of a
+    // layout change.
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      final newTotalExtent = controller.hasClients
+          ? controller.position.extentBefore +
+              controller.position.extentInside +
+              controller.position.extentAfter
+          : 0.0;
+      if (newTotalExtent != _totalExtent) {
+        _totalExtent = newTotalExtent;
+        setState(() {});
+      }
+    });
   }
 
   @override
