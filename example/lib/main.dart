@@ -1,4 +1,4 @@
-import 'package:fading_scroll/fading_scroll.dart';
+import 'package:clickup_fading_scroll/clickup_fading_scroll.dart';
 import 'package:flutter/material.dart';
 
 void main() {
