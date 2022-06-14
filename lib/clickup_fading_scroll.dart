@@ -1,5 +1,6 @@
 library clickup_fading_scroll;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// A widget builder for a scrollable subtree that must fade with a
@@ -21,6 +22,7 @@ class FadingScroll extends StatefulWidget {
     double? startScrollExtent,
     double? endScrollExtent,
     double? scrollExtent,
+    this.transitionDuration,
   })  : startScrollExtent = startScrollExtent ?? scrollExtent,
         endScrollExtent = endScrollExtent ?? scrollExtent,
         startFadingSize = startFadingSize ?? fadingSize,
@@ -60,6 +62,11 @@ class FadingScroll extends StatefulWidget {
   ///
   /// If not provided, it is equivalent to [endScrollExtent].
   final double? endFadingSize;
+
+  /// The duration for animate the mask whenever it changes.
+  ///
+  /// If `null`, the transition isn't animated.
+  final Duration? transitionDuration;
 
   /// The default value if neither [startScrollExtent] nor [endScrollExtent] is
   /// provided to a [FadingScroll].
@@ -154,30 +161,138 @@ class _FadingScrollableState extends State<FadingScroll> {
                 .clamp(0.0, 1.0);
         final startFadingMaxAmount = _fadingMaxAmount(startFadingMaxExtent);
         final endFadingMaxAmount = _fadingMaxAmount(endFadingMaxExtent);
-        return ShaderMask(
-          shaderCallback: (Rect bounds) {
-            return LinearGradient(
-              begin: isVertical ? Alignment.topCenter : Alignment.centerLeft,
-              end: isVertical ? Alignment.bottomCenter : Alignment.centerRight,
-              colors: <Color>[
-                if (startAmount > 0.0) const Color(0x00FFFFFF),
-                const Color(0xFFFFFFFF),
-                const Color(0xFFFFFFFF),
-                if (endAmount > 0.0) const Color(0x00FFFFFF),
-              ],
-              stops: <double>[
-                0.0,
-                if (startAmount > 0.0) startFadingMaxAmount * startAmount,
-                if (endAmount > 0.0) 1 - endFadingMaxAmount * endAmount,
-                1,
-              ],
-              tileMode: TileMode.mirror,
-            ).createShader(bounds);
-          },
-          child: child,
+        final startStop = startFadingMaxAmount * startAmount;
+        final endStop = 1 - endFadingMaxAmount * endAmount;
+        final transitionDuration = widget.transitionDuration;
+        if (transitionDuration == null) {
+          return _Mask(
+            startStop: startStop,
+            endStop: endStop,
+            child: child!,
+            isVertical: isVertical,
+          );
+        }
+        return _AnimatedMask(
+          duration: transitionDuration,
+          startStop: startStop,
+          endStop: endStop,
+          isVertical: isVertical,
+          child: child!,
         );
       },
       child: widget.builder(context, controller),
     );
+  }
+}
+
+class _Mask extends StatelessWidget {
+  const _Mask({
+    Key? key,
+    required this.startStop,
+    required this.endStop,
+    required this.child,
+    required this.isVertical,
+  }) : super(key: key);
+
+  final double startStop;
+  final double endStop;
+  final bool isVertical;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final startStop = this.startStop.clamp(0.0, 1.0);
+    final endStop = this.endStop.clamp(0.0, 1.0);
+    return ShaderMask(
+      shaderCallback: (Rect bounds) {
+        return LinearGradient(
+          begin: isVertical ? Alignment.topCenter : Alignment.centerLeft,
+          end: isVertical ? Alignment.bottomCenter : Alignment.centerRight,
+          colors: <Color>[
+            if (startStop > 0.0) const Color(0x00FFFFFF),
+            const Color(0xFFFFFFFF),
+            const Color(0xFFFFFFFF),
+            if (endStop < 1.0) const Color(0x00FFFFFF),
+          ],
+          stops: <double>[
+            0.0,
+            if (startStop > 0.0) startStop.toDouble(),
+            if (endStop < 1.0) endStop.toDouble(),
+            1,
+          ],
+          tileMode: TileMode.mirror,
+        ).createShader(bounds);
+      },
+      child: child,
+    );
+  }
+}
+
+class _AnimatedMask extends ImplicitlyAnimatedWidget {
+  const _AnimatedMask({
+    Key? key,
+    required this.startStop,
+    required this.endStop,
+    required this.child,
+    required this.isVertical,
+    Curve curve = Curves.linear,
+    required Duration duration,
+    VoidCallback? onEnd,
+  }) : super(
+          key: key,
+          curve: curve,
+          duration: duration,
+          onEnd: onEnd,
+        );
+
+  final double startStop;
+  final double endStop;
+  final bool isVertical;
+  final Widget child;
+
+  @override
+  AnimatedWidgetBaseState<_AnimatedMask> createState() => _AnimatedMaskState();
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<double>('startStop', startStop));
+    properties.add(DiagnosticsProperty<double>('endStop', endStop));
+  }
+}
+
+class _AnimatedMaskState extends AnimatedWidgetBaseState<_AnimatedMask> {
+  Tween<double>? _startStop;
+  Tween<double>? _endStop;
+
+  @override
+  void forEachTween(TweenVisitor<dynamic> visitor) {
+    _startStop = visitor(_startStop, widget.startStop,
+            (dynamic value) => Tween<double>(begin: value as double))
+        as Tween<double>?;
+    _endStop = visitor(_endStop, widget.endStop,
+            (dynamic value) => Tween<double>(begin: value as double))
+        as Tween<double>?;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final startStop = _startStop!.evaluate(animation);
+    final endStop = _endStop!.evaluate(animation);
+    return _Mask(
+      endStop: endStop.toDouble(),
+      startStop: startStop.toDouble(),
+      isVertical: widget.isVertical,
+      child: widget.child,
+    );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder description) {
+    super.debugFillProperties(description);
+    description.add(DiagnosticsProperty<Tween<double>>('startStop', _startStop,
+        defaultValue: null));
+    description.add(DiagnosticsProperty<Tween<double>>('endStop', _endStop,
+        defaultValue: null));
   }
 }
