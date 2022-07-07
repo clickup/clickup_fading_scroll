@@ -107,11 +107,12 @@ class _FadingScrollableState extends State<FadingScroll> {
     // This is needed because the notifier doesn't update its children of a
     // layout change.
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      final newTotalExtent = controller.hasClients
-          ? controller.position.extentBefore +
-              controller.position.extentInside +
-              controller.position.extentAfter
-          : 0.0;
+      final newTotalExtent =
+          controller.hasClients && controller.position.hasContentDimensions
+              ? controller.position.extentBefore +
+                  controller.position.extentInside +
+                  controller.position.extentAfter
+              : 0.0;
       if (newTotalExtent != _totalExtent) {
         _totalExtent = newTotalExtent;
         setState(() {});
@@ -129,7 +130,9 @@ class _FadingScrollableState extends State<FadingScroll> {
 
   double _fadingMaxAmount(double maxExtent) {
     final viewportDimension =
-        controller.hasClients ? controller.position.viewportDimension : 0.0;
+        controller.hasClients && controller.position.hasContentDimensions
+            ? controller.position.viewportDimension
+            : 0.0;
     return (maxExtent / viewportDimension).clamp(0, 0.5);
   }
 
