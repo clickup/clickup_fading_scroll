@@ -151,11 +151,15 @@ class _FadingScrollableState extends State<FadingScroll> {
         final isAttached = controller.hasClients;
         final isVertical =
             !isAttached || controller.position.axis == Axis.vertical;
-        final startAmount = !isAttached || controller.position.extentBefore <= 0
+        final startAmount = !isAttached ||
+                !controller.position.hasContentDimensions ||
+                controller.position.extentBefore <= 0
             ? 0.0
             : (controller.position.extentBefore / startScrollExtent)
                 .clamp(0.0, 1.0);
-        final endAmount = !isAttached || controller.position.extentAfter <= 0
+        final endAmount = !isAttached ||
+                !controller.position.hasContentDimensions ||
+                controller.position.extentAfter <= 0
             ? 0.0
             : (controller.position.extentAfter / endScrollExtent)
                 .clamp(0.0, 1.0);
