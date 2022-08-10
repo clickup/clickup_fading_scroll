@@ -83,7 +83,7 @@ class _FadingScrollableState extends State<FadingScroll> {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {}); // Trigger initial frame
     });
     super.initState();
@@ -106,7 +106,7 @@ class _FadingScrollableState extends State<FadingScroll> {
 
     // This is needed because the notifier doesn't update its children of a
     // layout change.
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final newTotalExtent =
           controller.hasClients && controller.position.hasContentDimensions
               ? controller.position.extentBefore +
