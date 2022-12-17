@@ -84,7 +84,7 @@ class _FadingScrollableState extends State<FadingScroll> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {}); // Trigger initial frame
+      if (mounted) setState(() {}); // Trigger initial frame
     });
     super.initState();
   }

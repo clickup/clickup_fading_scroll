@@ -1,5 +1,5 @@
 name: clickup_fading_scroll
-description: A new Flutter package project.
+description: Add a fading effect when the user can scroll.
 version: 0.0.1
 homepage: https://github.com/clickup/fading_scroll
 
