@@ -3,7 +3,7 @@
 
 <p align="center">Add a fading effect when the user can scroll.</p>
 
-<p align="center"><a href="https://clickup.github.com/fading_scroll">Demo</a></p>
+<p align="center"><a href="https://clickup.github.io/clickup_fading_scroll/">Demo</a></p>
 
 ## Quickstart
 
